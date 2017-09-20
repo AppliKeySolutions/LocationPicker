@@ -161,7 +161,12 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
      
      */
     open var locationDeniedHandler: ((LocationPicker) -> Void)?
-    
+	
+	/*
+	value that will be called each
+	time when search bar text changed
+	*/
+	open var searchTextChanged: ((String) -> Void)?
     
     // MARK: Optional variables
     
@@ -882,6 +887,7 @@ extension LocationPicker {
 extension LocationPicker: UISearchBarDelegate {
     
     public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		searchTextChanged?(searchText)
         if searchText.characters.count > 0 {
             let localSearchRequest = MKLocalSearchRequest()
             localSearchRequest.naturalLanguageQuery = searchText
