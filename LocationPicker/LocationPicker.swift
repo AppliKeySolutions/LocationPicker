@@ -104,7 +104,12 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
      `protocol LocationPickerDelegate`
      */
     open var pickCompletion: ((LocationItem) -> Void)?
-    
+	
+	/**
+	middle button action
+	*/
+	open var middleButtonHandler: ((LocationPicker) -> Void)?
+	
     /**
      Completion closure executed after user delete an alternative location.
      
@@ -408,6 +413,27 @@ open class LocationPicker: UIViewController, UIGestureRecognizerDelegate {
         
         barButtonItems = (doneButtonItem, cancelButtonItem)
     }
+	
+	/**
+	create middle button at center of navigation item
+	*/
+	open func addMiddleButton(withTitle title: String) {
+		let buttonContainer: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
+		buttonContainer.backgroundColor = UIColor.clear
+		let middleButton = UIButton(type: .custom)
+		middleButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+		middleButton.setTitle(title, for: .normal)
+		middleButton.addTarget(self, action: #selector(middleButtonPressed(_:)), for: .touchUpInside)
+		middleButton.setTitleColor(UIColor.black, for: .normal)
+		middleButton.showsTouchWhenHighlighted = true
+		buttonContainer.addSubview(middleButton)
+		self.navigationItem.titleView = middleButton;
+	}
+	
+	@objc
+	func middleButtonPressed(_ sender: UIButton) {
+		middleButtonHandler?(self)
+	}
     
     /**
      If you are content with the icons provided in `LocaitonPicker` but not with the colors, you can change them by calling this method.
